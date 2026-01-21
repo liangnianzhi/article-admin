@@ -18,15 +18,6 @@ import { cn } from '@/lib/utils.ts'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import {
   Form,
   FormControl,
   FormDescription,
@@ -53,6 +44,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea.tsx'
+import { ResponsiveModal } from '@/components/response-modal.tsx'
 
 export interface Task {
   id: number
@@ -174,157 +166,156 @@ export default function TaskManager() {
             当前活跃任务: {tasks?.length}
           </p>
         </div>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-          <DialogTrigger asChild>
+        <ResponsiveModal
+          title={editingTask ? '编辑任务' : '创建新任务'}
+          open={isFormOpen}
+          onOpenChange={setIsFormOpen}
+          trigger={
             <Button
               onClick={() => setEditingTask(null)}
-              className='rounded-full px-5'
+              className='rounded-full'
             >
-              <Plus className='mr-2 h-4 w-4' /> 新增任务
+              <Plus /> 新增任务
             </Button>
-          </DialogTrigger>
-          <DialogContent className='sm:max-w-[500px]'>
-            <DialogHeader>
-              <DialogTitle>
-                {editingTask ? '编辑任务' : '创建新任务'}
-              </DialogTitle>
-              <DialogDescription></DialogDescription>
-            </DialogHeader>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit((values) => {
-                  saveTaskMutation.mutate(values)
-                })}
-                className='space-y-4'
-              >
-                <FormField
-                  control={form.control}
-                  name='task_name'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>任务名称</FormLabel>
-                      <FormControl>
-                        <Input placeholder='输入任务名称' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='task_func'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>执行函数</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className='w-full'>
-                            <SelectValue placeholder='选择函数' />
-                          </SelectTrigger>
-                          <SelectContent className='w-full'>
-                            {taskFunctions?.map((f) => (
-                              <SelectItem key={f.func_name} value={f.func_name}>
-                                {f.func_label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='task_args'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>函数参数</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          placeholder='{"arg_name":"arg_value"}'
-                        ></Textarea>
-                      </FormControl>
-                      <FormDescription>
-                        <span>
-                          {
-                            taskFunctions?.find(
-                              (f) => f.func_name === selectedFunc
-                            )?.func_args_description
-                          }
-                        </span>
-                      </FormDescription>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='task_cron'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cron 表达式</FormLabel>
-                      <FormControl>
-                        <div className='relative'>
-                          <Input {...field} />
-                          <Clock className='absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
-                        </div>
-                      </FormControl>
-                      <FormDescription>
-                        <span className='rounded bg-muted px-1.5 py-0.5 italic'>
-                          */5 * * * * (每5分)
-                        </span>
-                        <span className='rounded bg-muted px-1.5 py-0.5 italic'>
-                          0 0 * * * (每日)
-                        </span>
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='enable'
-                  render={({ field }) => (
-                    <FormItem className='flex items-center justify-between'>
-                      <FormLabel>开启任务</FormLabel>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <DialogFooter>
-                  <Button type='submit' disabled={saveTaskMutation.isPending}>
-                    {saveTaskMutation.isPending ? '保存中...' : '保存配置'}
-                  </Button>
-                </DialogFooter>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
+          }
+        >
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit((values) => {
+                saveTaskMutation.mutate(values)
+              })}
+              className='space-y-4'
+            >
+              <FormField
+                control={form.control}
+                name='task_name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>任务名称</FormLabel>
+                    <FormControl>
+                      <Input placeholder='输入任务名称' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='task_func'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>执行函数</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='选择函数' />
+                        </SelectTrigger>
+                        <SelectContent className='w-full'>
+                          {taskFunctions?.map((f) => (
+                            <SelectItem key={f.func_name} value={f.func_name}>
+                              {f.func_label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='task_args'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>函数参数</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder='{"arg_name":"arg_value"}'
+                      ></Textarea>
+                    </FormControl>
+                    <FormDescription>
+                      <span>
+                        {
+                          taskFunctions?.find(
+                            (f) => f.func_name === selectedFunc
+                          )?.func_args_description
+                        }
+                      </span>
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='task_cron'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cron 表达式</FormLabel>
+                    <FormControl>
+                      <div className='relative'>
+                        <Input {...field} />
+                        <Clock className='absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
+                      </div>
+                    </FormControl>
+                    <FormDescription>
+                      <span className='rounded bg-muted px-1.5 py-0.5 italic'>
+                        */5 * * * * (每5分)
+                      </span>
+                      <span className='rounded bg-muted px-1.5 py-0.5 italic'>
+                        0 0 * * * (每日)
+                      </span>
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='enable'
+                render={({ field }) => (
+                  <FormItem className='flex items-center justify-between'>
+                    <FormLabel>开启任务</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type='submit' disabled={saveTaskMutation.isPending} className="w-full">
+                {saveTaskMutation.isPending ? '保存中...' : '保存配置'}
+              </Button>
+            </form>
+          </Form>
+        </ResponsiveModal>
       </div>
       <div className='overflow-hidden rounded-2xl border shadow-sm'>
         <Table>
-          <TableHeader>
+          {/* 1. 移动端隐藏表头 */}
+          <TableHeader className='hidden md:table-header-group'>
             <TableRow>
               <TableHead>任务名称</TableHead>
               <TableHead>执行逻辑</TableHead>
               <TableHead>Cron 周期</TableHead>
-              <TableHead className='sticky right-0 text-right'>管理</TableHead>
+              <TableHead className='text-right'>管理</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {tasks?.map((task) => (
-              <TableRow key={task.id} className='group transition-colors'>
-                <TableCell>
-                  <div className='flex items-center gap-3'>
+              <TableRow
+                key={task.id}
+                className='group flex flex-col border-b p-4 transition-colors md:table-row md:p-0'
+              >
+                <TableCell className='p-0 pb-3 md:table-cell md:py-4'>
+                  <div className='flex items-center gap-3 pl-2'>
                     <div
                       className={cn(
                         'h-2 w-2 rounded-full',
@@ -333,35 +324,45 @@ export default function TaskManager() {
                           : 'bg-slate-400 shadow-none'
                       )}
                     />
-                    <span className='font-semibold'>{task.task_name}</span>
+                    <span className='font-bold text-base md:font-semibold'>{task.task_name}</span>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className='flex items-center gap-2'>
+
+                <TableCell className='flex items-start justify-between py-2 px-0 md:table-cell md:py-4'>
+                  <span className='text-sm font-medium text-muted-foreground md:hidden'>执行逻辑</span>
+                  <div className='flex flex-col items-end gap-2 md:flex-row md:items-center'>
                     <Badge variant='outline' className='font-mono'>
                       {task.task_func}
                     </Badge>
-                    <span className='text-xs text-muted-foreground'>→</span>
-                    <span className='text-xs text-slate-600'>
-                      {task.task_args}
-                    </span>
+                    <div className='flex items-center gap-2'>
+                      <span className='hidden text-xs text-muted-foreground md:inline'>→</span>
+                      <span className='text-xs text-slate-600 max-w-[200px] truncate md:max-w-none'>
+                {task.task_args}
+              </span>
+                    </div>
                   </div>
                 </TableCell>
-                <TableCell className='font-mono text-sm text-muted-foreground'>
-                  {task.task_cron}
+
+                <TableCell className='flex items-center justify-between py-2 px-0 md:table-cell md:py-4'>
+                  <span className='text-sm font-medium text-muted-foreground md:hidden'>Cron 周期</span>
+                  <span className='font-mono text-sm text-muted-foreground'>
+            {task.task_cron}
+          </span>
                 </TableCell>
-                <TableCell className='sticky right-0 text-right'>
-                  <div className='flex justify-end gap-1'>
+
+                <TableCell className='flex justify-end pt-3 px-0 md:table-cell md:pt-4 md:sticky md:right-0'>
+                  <div className='flex gap-1 border-t pt-3 w-full justify-end md:border-none md:pt-0 md:w-auto'>
                     <Button
-                      variant='ghost'
+                      variant='outline'
                       size='icon'
-                      onClick={() => handleRunTask(task.id)}
+                      className="h-9 w-9 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 hover:border-emerald-200 md:h-8 md:w-8 md:border-none md:bg-transparent"                      onClick={() => handleRunTask(task.id)}
                     >
                       <Play className='h-4 w-4' />
                     </Button>
                     <Button
-                      variant='ghost'
+                      variant='outline'
                       size='icon'
+                      className="h-9 w-9 md:h-8 md:w-8 md:variant-ghost"
                       onClick={() => {
                         setEditingTask(task)
                         setIsFormOpen(true)
@@ -370,9 +371,9 @@ export default function TaskManager() {
                       <Pencil className='h-4 w-4' />
                     </Button>
                     <Button
-                      variant='ghost'
+                      variant='outline'
                       size='icon'
-                      className='text-destructive'
+                      className='h-9 w-9 text-destructive md:h-8 md:w-8 md:variant-ghost'
                       onClick={() => handleDelete(task.id)}
                     >
                       <Trash2 className='h-4 w-4' />

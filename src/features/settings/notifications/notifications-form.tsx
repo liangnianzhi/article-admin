@@ -1,3 +1,4 @@
+import { Card, CardContent } from '@/components/ui/card.tsx'
 import {
   Tabs,
   TabsContent,
@@ -16,11 +17,19 @@ export function NotificationsForm() {
       </TabsList>
 
       <TabsContent value='wechat'>
-        <WechatNotificationForm />
+        <Card>
+          <CardContent>
+            <WechatNotificationForm />
+          </CardContent>
+        </Card>
       </TabsContent>
 
       <TabsContent value='telegram'>
-        <TelegramNotificationForm />
+        <Card>
+          <CardContent>
+            <TelegramNotificationForm />
+          </CardContent>
+        </Card>
       </TabsContent>
     </Tabs>
   )

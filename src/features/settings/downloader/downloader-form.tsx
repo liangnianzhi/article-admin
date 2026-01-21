@@ -32,7 +32,7 @@ export function DownloaderForm() {
       {DOWNLOADER_META.map((d) => (
         <TabsContent key={d.id} value={d.id}>
           <Card>
-            <CardContent className='space-y-6'>
+            <CardContent>
               {d.id === 'thunder' ? (
                 <Thunder downloaderId={d.id} />
               ) : (

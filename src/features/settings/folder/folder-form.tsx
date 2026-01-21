@@ -93,7 +93,8 @@ export function FolderForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+      <form onSubmit={form.handleSubmit(onSubmit)}
+            className='max-w-md space-y-4'>
         <Button
           type='button'
           variant='outline'
@@ -123,8 +124,8 @@ export function FolderForm() {
           />
         ))}
 
-        <Button type='submit' className='min-w-[140px]'>
-          <Save className='mr-2 h-4 w-4' />
+        <Button type='submit'>
+          <Save/>
           保存配置
         </Button>
       </form>

@@ -2,7 +2,6 @@ import type z from 'zod'
 import type { UseFormReturn } from 'react-hook-form'
 import type { Category } from '@/types/article.ts'
 import { ChevronDown, Trash2, Regex } from 'lucide-react'
-import { Badge } from '@/components/ui/badge.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import {
   Collapsible,
@@ -56,27 +55,49 @@ export function FolderItem({
   return (
     <Collapsible className='group overflow-hidden rounded-xl border bg-card'>
       <CollapsibleTrigger asChild>
-        <div className='flex cursor-pointer items-center justify-between px-5 py-4 hover:bg-muted/50'>
-          <div className='flex items-center gap-3'>
-            <div className='flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 font-bold text-primary'>
+        <div className='flex cursor-pointer items-center justify-between gap-3 px-3 py-4 hover:bg-muted/50 transition-colors group'>
+          {/* 左侧内容区：min-w-0 是防止溢出的关键 */}
+          <div className='flex items-center gap-3 min-w-0 flex-1'>
+            {/* 序号：固定宽度，不参与缩放 */}
+            <div className='flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-secondary-foreground'>
               {index + 1}
             </div>
-            <Badge variant='secondary'>
-              {category || '未选择类目'} · {subCategory || '未选择子类目'} ·{regex || ''}
-            </Badge>
-            {savePath && (
-              <div className='truncate text-xs text-muted-foreground'>
-                {downloader} - {savePath}
+
+            {/* 文字主体：min-w-0 确保内部 truncate 生效 */}
+            <div className='flex-1 min-w-0 space-y-1'>
+              {/* 标题行：移动端建议允许折行，或使用更紧凑的间距 */}
+              <div className='text-sm font-medium leading-none text-foreground break-words sm:truncate'>
+                <span className="text-primary/90">{category || '未选择板块'}</span>
+                <span className="mx-1.5 text-muted-foreground/50">/</span>
+                <span>{subCategory || '未选择类目'}</span>
+                {regex && (
+                  <>
+                    <span className="mx-1.5 text-muted-foreground/50">/</span>
+                    <span className="font-mono text-xs bg-muted px-1 rounded">{regex}</span>
+                  </>
+                )}
               </div>
-            )}
+
+              {savePath && (
+                <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
+                  <span className="shrink-0 font-semibold text-[10px] uppercase tracking-wider">{downloader}</span>
+                  <span className="text-muted-foreground/30">|</span>
+                  {/* 路径：强制截断并显示省略号 */}
+                  <span className='truncate italic'>
+            {savePath}
+          </span>
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className='flex items-center gap-2'>
-            <ChevronDown className='h-4 w-4 transition-transform group-data-[state=open]:rotate-180' />
+          {/* 右侧操作区：shrink-0 防止按钮被左侧长文字挤压 */}
+          <div className='flex shrink-0 items-center gap-1 ml-2'>
+            <ChevronDown className='h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180' />
             <Button
               size='icon'
               variant='ghost'
-              className='text-destructive'
+              className='h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive'
               onClick={(e) => {
                 e.stopPropagation()
                 remove(index)
@@ -90,7 +111,6 @@ export function FolderItem({
 
       <CollapsibleContent className='border-t bg-muted/20'>
         <div className='grid gap-5 p-5 sm:grid-cols-2'>
-          {/* category */}
           <FormField
             control={form.control}
             name={`folders.${index}.category`}

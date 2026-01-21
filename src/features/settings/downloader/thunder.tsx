@@ -3,6 +3,7 @@ import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Save } from 'lucide-react'
 import { toast } from 'sonner'
 import { getConfig, postConfig } from '@/api/config.ts'
 import { Button } from '@/components/ui/button.tsx'
@@ -16,7 +17,6 @@ import {
 } from '@/components/ui/form.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { PathListInput } from '@/features/settings/downloader/path-input-list.tsx'
-import { Save } from 'lucide-react'
 
 const thunderSchema = z.object({
   url: z.string().min(1, '输入地址'),
@@ -69,64 +69,59 @@ export function Thunder({ downloaderId }: { downloaderId: string }) {
   }, [data, downloader])
 
   return (
-    <div className='w-full max-w-md'>
-      <Form {...downloader}>
-        <form
-          onSubmit={downloader.handleSubmit((values) => {
-            updateMutation.mutate(values)
-          })}
-          className='space-y-4'
-        >
-          <FormField
-            control={downloader.control}
-            name='url'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>WEB UI地址</FormLabel>
-                <FormControl>
-                  <Input placeholder='输入WEB UI地址' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={downloader.control}
-            name='authorization'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>用户名</FormLabel>
-                <FormControl>
-                  <Input placeholder='输入请求头' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <Form {...downloader}>
+      <form
+        onSubmit={downloader.handleSubmit((values) => {
+          updateMutation.mutate(values)
+        })}
+        className='max-w-md space-y-4'
+      >
+        <FormField
+          control={downloader.control}
+          name='url'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>WEB UI地址</FormLabel>
+              <FormControl>
+                <Input placeholder='输入WEB UI地址' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={downloader.control}
+          name='authorization'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>请求头</FormLabel>
+              <FormControl>
+                <Input placeholder='输入请求头' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={downloader.control}
-            name='save_paths'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>保存目录ID</FormLabel>
-                <FormControl>
-                  <PathListInput
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={downloader.control}
+          name='save_paths'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>保存目录ID</FormLabel>
+              <FormControl>
+                <PathListInput value={field.value} onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <Button type='submit' className='min-w-[140px]'>
-            <Save className='mr-2 h-4 w-4' />
-            保存配置
-          </Button>
-        </form>
-      </Form>
-    </div>
+        <Button type='submit'>
+          <Save />
+          保存配置
+        </Button>
+      </form>
+    </Form>
   )
 }

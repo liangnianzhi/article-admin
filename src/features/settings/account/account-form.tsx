@@ -36,11 +36,10 @@ export function AccountForm() {
   }
 
   return (
-    <div className='w-full max-w-md'>
       <Form {...account}>
         <form
           onSubmit={account.handleSubmit(handleSubmit)}
-          className='space-y-4'
+          className='space-y-4  max-w-md'
         >
           <FormField
             control={account.control}
@@ -72,12 +71,11 @@ export function AccountForm() {
               </FormItem>
             )}
           />
-          <Button type='submit' className='min-w-[140px]'>
-            <Save className='mr-2 h-4 w-4' />
+          <Button type='submit'>
+            <Save/>
             保存配置
           </Button>
         </form>
       </Form>
-    </div>
   )
 }
