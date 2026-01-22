@@ -99,7 +99,7 @@ export function ArticlesDesktop() {
       </div>
 
       {/* ④ 分页 */}
-      <div className='sticky bottom-0 z-30 border-t bg-background'>
+      <div className='sticky bottom-0 z-30 mt-2'>
         <CommonPagination
           page={page}
           total={data?.total || 0}

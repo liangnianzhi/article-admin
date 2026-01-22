@@ -4,6 +4,9 @@ import {
   HelpCircle,
   Settings,
   Newspaper,
+  ClipboardClock,
+  AlarmClockCheck,
+  BookCheck,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 
@@ -28,17 +31,19 @@ export const sidebarData: SidebarData = {
             {
               url: '/tasks',
               title: '任务管理',
+              icon: BookCheck,
             },
             {
               url: '/tasks/log',
               title: '执行记录',
+              icon: AlarmClockCheck,
             },
           ],
         },
         {
           title: '下载记录',
           url: '/download-log',
-          icon: Newspaper,
+          icon: ClipboardClock,
         },
         {
           title: '文章',

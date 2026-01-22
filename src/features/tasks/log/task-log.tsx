@@ -170,7 +170,7 @@ export function TaskLogTable() {
       </div>
 
       {/* ④ 分页 */}
-      <div className='sticky bottom-0 z-30 border-t bg-background'>
+      <div className='sticky bottom-0 z-30 mt-2'>
         <CommonPagination
           page={filter.page}
           total={data?.total || 0}

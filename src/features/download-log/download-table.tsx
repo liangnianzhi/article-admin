@@ -225,7 +225,7 @@ export function DownloadLogTable() {
         </Table>
       </div>
 
-      <div className='sticky bottom-0 z-10 border-t bg-background'>
+      <div className='sticky bottom-0 z-10 mt-2'>
         <CommonPagination
           page={filter.page}
           total={data?.total || 0}
