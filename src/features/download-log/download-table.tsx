@@ -87,7 +87,7 @@ export function DownloadLogTable() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleFilter)}
-            className='grid grid-cols-6 items-end gap-4'
+            className='grid grid-cols-2 lg:grid-cols-4 items-end gap-4'
           >
             <FormField
               control={form.control}
@@ -122,7 +122,7 @@ export function DownloadLogTable() {
               name='save_path'
               render={({ field }) => (
                 <FormItem className='flex items-center gap-2'>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!downloader}>
                     <FormControl>
                       <SelectTrigger className='w-full'>
                         <SelectValue placeholder='选择路径' />

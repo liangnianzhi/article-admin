@@ -18,7 +18,7 @@ export function DownloadLog() {
         </div>
       </Header>
 
-      <Main className='flex h-[calc(100vh-4rem)] flex-col'>
+      <Main fixed>
         <div className='flex flex-wrap items-end justify-between gap-2'>
           <div>
             <h2 className='text-2xl font-bold tracking-tight'>下载记录</h2>

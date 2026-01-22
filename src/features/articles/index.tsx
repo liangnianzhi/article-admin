@@ -22,7 +22,7 @@ export function Articles() {
         </div>
       </Header>
 
-      <Main className='flex h-[calc(100vh-4rem)] flex-col'>
+      <Main fixed>
         {isMobile ? <ArticlesMobile /> : <ArticlesDesktop />}
       </Main>
     </>
