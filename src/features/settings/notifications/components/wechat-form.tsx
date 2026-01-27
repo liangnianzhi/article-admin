@@ -171,6 +171,19 @@ export function WechatNotificationForm() {
         />
 
         <FormField
+          name='proxy'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>微信代理</FormLabel>
+              <FormControl>
+                <Input placeholder='微信代理url' {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
           name='template'
           control={form.control}
           render={({ field }) => (

@@ -57,7 +57,7 @@ export function TaskLogTable() {
         <Select
           value={filter.task_func}
           onValueChange={(v) =>
-            setFilter((prev) => ({ ...prev, task_func: v }))
+            setFilter((prev) => ({ ...prev, task_func: v === 'all' ? '' : v}))
           }
         >
           <SelectTrigger className='w-full max-w-48'>

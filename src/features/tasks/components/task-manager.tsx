@@ -88,10 +88,13 @@ export default function TaskManager() {
     },
 
     onSuccess: (res) => {
-      toast.success(res.message)
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-      setIsFormOpen(false)
-      setEditingTask(null)
+      if(res.code===0){
+        toast.success(res.message)
+        queryClient.invalidateQueries({ queryKey: ['tasks'] })
+        setIsFormOpen(false)
+        setEditingTask(null)
+      }
+
     },
   })
 
