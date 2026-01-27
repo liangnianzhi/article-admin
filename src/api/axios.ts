@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth-store.ts'
 
 const axios: AxiosInstance = Axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 15000,
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
   },
