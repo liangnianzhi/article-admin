@@ -75,12 +75,15 @@ export function ArticlesDesktop() {
       </div>
 
       {/* ② 表格区域（滚动容器） */}
-      <div className='flex-1 space-y-2 overflow-auto'>
+      <div className='flex-1 space-y-2 overflow-auto '>
+
         {isLoading && <Loading />}
         {data?.items.length === 0 && <EmptyState />}
-        {data?.items.map((article) => (
-          <ArticleCard key={article.tid} article={article} />
-        ))}
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {data?.items.map((article) => (
+            <ArticleCard key={article.tid} article={article} />
+          ))}
+        </div>
       </div>
 
       {/* ④ 分页 */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,6 +11,7 @@ import {
   manulDownloadArticle,
 } from '@/api/article'
 import { fetchDownloaderList } from '@/api/config'
+import { getCookie, setCookie } from '@/lib/cookies.ts'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -38,7 +39,9 @@ interface DownloaderDialogProps {
   trigger?: React.ReactNode
 }
 
-export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
+const DOWNLOAD_PREF_KEY = 'download:last-selection'
+
+export function DownloaderButton({ articleId }: DownloaderDialogProps) {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
@@ -100,14 +103,38 @@ export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
       if (res.code === 0) {
         toast.success(res.message)
         setOpen(false)
-        form.reset()
         updateSockStatus()
+        setCookie(
+          DOWNLOAD_PREF_KEY,
+          JSON.stringify({
+            downloader: selectedDownloader,
+            savePath: form.getValues('savePath'),
+          })
+        )
       }
     },
     onError: (err: Error) => {
       toast.error(`推送失败，请重试:${err}`)
     },
   })
+
+  useEffect(() => {
+    if (!open) return
+
+    const raw = getCookie(DOWNLOAD_PREF_KEY)
+    if (!raw) return
+
+    try {
+      const { downloader, savePath } = JSON.parse(raw)
+
+      form.reset({
+        downloader: downloader ?? 'auto',
+        savePath: savePath ?? 'auto',
+      })
+    } catch {
+      // ignore malformed storage
+    }
+  }, [form, open])
 
   return (
     <ResponsiveModal
@@ -116,14 +143,9 @@ export function DownloaderDialog({ articleId }: DownloaderDialogProps) {
       title='选择下载器'
       description='选择要使用的下载器和保存目录'
       trigger={
-        <Button
-          size='sm'
-          variant='outline'
-          className='flex-1 shadow-md transition-all hover:shadow-lg sm:w-28 sm:flex-none'
-        >
+        <Button size='sm' variant='outline' className='gap-2'>
           <Download className='h-4 w-4' />
-          <span className='hidden sm:inline'>推送下载</span>
-          <span className='sm:hidden'>下载</span>
+          下载
         </Button>
       }
     >

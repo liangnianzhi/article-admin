@@ -29,7 +29,8 @@ function ScrollArea({
       >
         {children}
       </ScrollAreaPrimitive.Viewport>
-      <ScrollBar orientation={orientation} />
+      {/*隐藏滚动条*/}
+      {/*<ScrollBar orientation={orientation} />*/}
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
   )

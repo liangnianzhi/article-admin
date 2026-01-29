@@ -2,7 +2,6 @@ import { useState } from 'react'
 import {
   Copy,
   Image as ImageIcon,
-  Download,
   Package,
   Calendar as CalendarIcon,
   CheckCircle2,
@@ -13,7 +12,7 @@ import { useImageMode } from '@/context/image-mode-provider.tsx'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { DownloaderDialog } from './downloader-dialog'
+import { DownloaderButton } from './downloader-button.tsx'
 import type { Article } from '@/api/article.ts'
 import { ImagePreview } from '@/components/image-preview.tsx'
 
@@ -34,13 +33,17 @@ export function ArticleCard({ article }: { article: Article }) {
   return (
     <Card className='group glass-card relative flex w-full max-w-full flex-col gap-4 overflow-hidden rounded-2xl p-4 transition-all duration-300 sm:flex-row'>
       {/* 顶部渐变装饰 */}
-      <div className='absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
-
+      <div className="absolute top-0 left-0 h-1 w-full
+  bg-gradient-to-r
+  from-pink-400 via-sky-400 to-blue-500
+  opacity-0 transition-opacity duration-300
+  group-hover:opacity-100"
+      />
       {/* 图片预览 */}
       {images.length > 0 && (
         <ImagePreview images={images} alt={article.title} image_trigger={
           mode !== 'hide' && (
-            <div className='relative h-48 w-full cursor-pointer overflow-hidden rounded-xl sm:h-32 sm:w-48 sm:flex-shrink-0'>
+            <div className='relative h-48 w-full cursor-pointer overflow-hidden rounded-xl sm:h-48 sm:w-48 sm:flex-shrink-0'>
               {!imageError && images.length > 0 ? (
                 <>
                   <img
@@ -99,7 +102,7 @@ export function ArticleCard({ article }: { article: Article }) {
         </div>
 
         {/* 标题 */}
-        <h6 className='line-clamp-2 break-words text-base font-semibold leading-snug transition-colors group-hover:text-primary sm:text-sm'>
+        <h6 className='line-clamp-3 break-words text-base font-semibold leading-snug transition-colors group-hover:text-primary sm:text-sm'>
           {article.title}
         </h6>
 
@@ -134,33 +137,19 @@ export function ArticleCard({ article }: { article: Article }) {
             )}
           </span>
         </div>
-      </div>
 
-      {/* 操作按钮 */}
-      <div className='flex w-full gap-2 sm:w-auto sm:flex-col sm:justify-center'>
-        <Button
-          size='sm'
-          variant='default'
-          className='flex-1 gap-2 shadow-md transition-all hover:shadow-lg sm:w-28 sm:flex-none'
-          onClick={handleCopyMagnet}
-        >
-          <Copy className='h-4 w-4' />
-          <span>复制</span>
-        </Button>
+        <div className="mt-2 flex gap-2 pt-2 justify-end">
+          <Button
+            size="sm"
+            className="gap-2"
+            onClick={handleCopyMagnet}
+          >
+            <Copy className="h-4 w-4" />
+            复制
+          </Button>
 
-        <DownloaderDialog
-          articleId={article.tid}
-          trigger={
-            <Button
-              size='sm'
-              variant='outline'
-              className='flex-1 gap-2 shadow-md transition-all hover:shadow-lg sm:w-28 sm:flex-none'
-            >
-              <Download className='h-4 w-4' />
-              <span>下载</span>
-            </Button>
-          }
-        />
+          <DownloaderButton articleId={article.tid} />
+        </div>
       </div>
     </Card>
   )
